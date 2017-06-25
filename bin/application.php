@@ -6,8 +6,8 @@ use Rohit\MyApp\DataGenerate;
 use Rohit\MyApp\MyContainer;
 use Symfony\Component\Console\Application;
 
-$container = new MyContainer();
-$container->build();
+//$container = new MyContainer();
+//$container->build();
 
 $command = new DataGenerate();
 
