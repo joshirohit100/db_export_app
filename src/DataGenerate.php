@@ -23,7 +23,8 @@ class DataGenerate extends Command
   {
     $this->setName('my-app');
     $this->setDescription('Generates the data dump');
-    $this->addOption('format', 'f', InputOption::VALUE_OPTIONAL, '', 'Provide the default format');
+    $this->addOption('format', 'f', InputOption::VALUE_OPTIONAL, 'Provide the default format', 'json');
+    $this->addOption('output_directory_path', 'o', InputOption::VALUE_OPTIONAL, 'Provide the output directory path', '/tmp/my_app_json/');
   }
 
   /**
@@ -31,9 +32,14 @@ class DataGenerate extends Command
    */
   protected function execute(InputInterface $input, OutputInterface $output)
   {
-    $format = $input->getOption('format')?: 'json';
-    $output_directory = '/tmp/wordpress/';
-    $output->writeln("Your data will be exported in: " . $format);
+    // Data format.
+    $format = $input->getOption('format');
+    // Output directory path.
+    $output_directory = $input->getOption('output_directory_path');
+
+    // Message.
+    $output->writeln("Your data will be exported in " . $output_directory . " directory");
+
     $users = new WordpressQuery();
     $data = $users->getData();
 
@@ -49,14 +55,16 @@ class DataGenerate extends Command
 
     if (!empty($data)) {
       foreach ($data as $key => $item) {
-        $response = $serializer->serialize([$key => $item], $format);
-        try {
-          $file_path = $output_directory . $key;
-          $file_name = $file_path . '/' . $key . '.' .  $format;
-          $fs->mkdir($file_path);
-          $fs->dumpFile($file_name, $response);
-        } catch (IOExceptionInterface $e) {
-          echo "An error occurred while creating your directory at ". $e->getPath();
+        if (!empty($data[$key])) {
+          $response = $serializer->serialize([$key => $item], $format);
+          try {
+            $file_path = $output_directory . $key;
+            $file_name = $file_path . '/' . $key . '.' .  $format;
+            $fs->mkdir($file_path);
+            $fs->dumpFile($file_name, $response);
+          } catch (IOExceptionInterface $e) {
+            echo "An error occurred while creating your directory at ". $e->getPath();
+          }
         }
       }
     }
