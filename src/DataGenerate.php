@@ -12,6 +12,8 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Exception\RuntimeException;
 
 
 class DataGenerate extends Command
@@ -40,8 +42,11 @@ class DataGenerate extends Command
     // Message.
     $output->writeln("Your data will be exported in " . $output_directory . " directory");
 
-    $users = new WordpressQuery();
-    $data = $users->getData();
+    $object = new WordpressQuery();
+    if (!$object instanceof QueryInterface) {
+      throw new RuntimeException('Class must implements the QueryInterface.');
+    }
+    $data = $object->getData();
 
     $encoders = [
       new XmlEncoder(),
@@ -54,6 +59,11 @@ class DataGenerate extends Command
     $fs = new Filesystem();
 
     if (!empty($data)) {
+      // Create a progress bar.
+      $progress = new ProgressBar($output);
+      // Start and displays the progress bar
+      $progress->start();
+
       foreach ($data as $key => $item) {
         if (!empty($data[$key])) {
           $response = $serializer->serialize([$key => $item], $format);
@@ -62,11 +72,15 @@ class DataGenerate extends Command
             $file_name = $file_path . '/' . $key . '.' .  $format;
             $fs->mkdir($file_path);
             $fs->dumpFile($file_name, $response);
+            $progress->advance();
           } catch (IOExceptionInterface $e) {
             echo "An error occurred while creating your directory at ". $e->getPath();
           }
         }
       }
+
+      // ensure that the progress bar is at 100%
+      $progress->finish();
     }
   }
 
