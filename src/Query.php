@@ -9,7 +9,7 @@ abstract class Query implements QueryInterface {
   /**
    * {@inheritdoc}
    */
-  public function getCommentData() {
+  public function getUserData() {
     return [];
   }
 
@@ -23,14 +23,22 @@ abstract class Query implements QueryInterface {
   /**
    * {@inheritdoc}
    */
-  public function getUserData() {
+  public function getFilesData() {
+    return [];
+  }
+
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getContentData() {
     return [];
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getContentData() {
+  public function getCommentData() {
     return [];
   }
 

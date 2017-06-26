@@ -26,7 +26,7 @@ class DataGenerate extends Command
     $this->setName('my-app');
     $this->setDescription('Generates the data dump');
     $this->addOption('format', 'f', InputOption::VALUE_OPTIONAL, 'Provide the default format', 'json');
-    $this->addOption('output_directory_path', 'o', InputOption::VALUE_OPTIONAL, 'Provide the output directory path', '/tmp/my_app_json/');
+    $this->addOption('output_directory_path', 'o', InputOption::VALUE_OPTIONAL, 'Provide the output directory path', '/tmp/my_app_json');
   }
 
   /**
@@ -61,18 +61,18 @@ class DataGenerate extends Command
     if (!empty($data)) {
       // Create a progress bar.
       $progress = new ProgressBar($output);
-      // Start and displays the progress bar
+      // Start and displays the progress bar.
       $progress->start();
 
       foreach ($data as $key => $item) {
         if (!empty($data[$key])) {
           $response = $serializer->serialize([$key => $item], $format);
           try {
-            $file_path = $output_directory . $key;
-            $file_name = $file_path . '/' . $key . '.' .  $format;
-            $fs->mkdir($file_path);
+            $file_name = $output_directory . '/' . $key . '.' .  $format;
+            $fs->mkdir($output_directory);
             $fs->dumpFile($file_name, $response);
             $progress->advance();
+            $output->writeln("\n  ");
           } catch (IOExceptionInterface $e) {
             echo "An error occurred while creating your directory at ". $e->getPath();
           }

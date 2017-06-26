@@ -6,7 +6,8 @@ interface QueryInterface {
 
   public function getUserData();
   public function getTermData();
-  public function getCommentData();
+  public function getFilesData();
   public function getContentData();
+  public function getCommentData();
 
 }
