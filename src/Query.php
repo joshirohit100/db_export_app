@@ -1,8 +1,8 @@
 <?php
 
-namespace Rohit\MyApp;
+namespace SfDataExport;
 
-use Rohit\MyApp\QueryInterface;
+use SfDataExport\QueryInterface;
 
 abstract class Query implements QueryInterface {
 

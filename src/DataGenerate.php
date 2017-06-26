@@ -1,6 +1,6 @@
 <?php
 
-namespace Rohit\MyApp;
+namespace SfDataExport;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
@@ -23,10 +23,10 @@ class DataGenerate extends Command
    */
   protected function configure()
   {
-    $this->setName('my-app');
-    $this->setDescription('Generates the data dump');
-    $this->addOption('format', 'f', InputOption::VALUE_OPTIONAL, 'Provide the default format', 'json');
-    $this->addOption('output_directory_path', 'o', InputOption::VALUE_OPTIONAL, 'Provide the output directory path', '/tmp/my_app_json');
+    $this->setName('sf_data_export');
+    $this->setDescription('Exports the database into given format like xml/json.');
+    $this->addOption('format', 'f', InputOption::VALUE_OPTIONAL, 'Provide the data export format - xml or json.', 'xml');
+    $this->addOption('output_directory_path', 'o', InputOption::VALUE_OPTIONAL, 'Provide the output directory path', '/tmp/sf_data_export');
   }
 
   /**

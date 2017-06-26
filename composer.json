@@ -1,6 +1,6 @@
 {
-  "name": "rohit/my-app",
-  "description": "My App",
+  "name": "sf_data_export",
+  "description": "Symfony Data Export",
   "type": "project",
   "license": "GPL-2.0+",
   "authors": [
@@ -18,8 +18,8 @@
     "symfony/property-access": "^3.3",
     "symfony/filesystem": "^3.3"
   },
-  "bin": ["bin/my_app"],
+  "bin": ["bin/app"],
   "autoload": {
-    "psr-4": {"Rohit\\MyApp\\": "src"}
+    "psr-4": {"SfDataExport\\": "src"}
   }
 }

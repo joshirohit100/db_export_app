@@ -1,6 +1,6 @@
 <?php
 
-namespace Rohit\MyApp;
+namespace SfDataExport;
 
 interface QueryInterface {
 
