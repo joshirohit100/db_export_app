@@ -11,7 +11,7 @@ class WordpressQuery extends Query {
    */
   public function getData() {
     $data['user'] = $this->getUserData();
-    $data['term'] = $this->getTegetTermDatarmData();
+    $data['term'] = $this->getTermData();
     $data['content'] = $this->getContentData();
     $data['comment'] = $this->getCommentData();
     return $data;
@@ -88,9 +88,22 @@ class WordpressQuery extends Query {
     return $data;
   }
 
+  /**
+   * Database connection.
+   *
+   * @return \PDO
+   *   PDO object.
+   */
   public function getConnection() {
+    global $connection;
+    $host = $connection['mysql']['host'];
+    $port = $connection['mysql']['port'];
+    $db = $connection['mysql']['db'];
+    $user = $connection['mysql']['user'];
+    $pass = $connection['mysql']['password'];
     $options = [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'];
-    $conntection = new \PDO("mysql:host=127.0.0.1:3306;dbname=wordpress_test", 'root', 'root', $options);
+    $conntection = new \PDO("mysql:host=$host:$port;dbname=$db", $user, $pass, $options);
     return $conntection;
   }
+
 }
