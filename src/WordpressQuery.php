@@ -11,8 +11,7 @@ class WordpressQuery extends Query {
    */
   public function getData() {
     $data['user'] = $this->getUserData();
-    $data['term'] = $this->getTermData();
-    $data['files'] = $this->getFilesData();
+    $data['term'] = $this->getTegetTermDatarmData();
     $data['content'] = $this->getContentData();
     $data['comment'] = $this->getCommentData();
     return $data;
@@ -60,7 +59,19 @@ class WordpressQuery extends Query {
     $sql = 'SELECT id, post_title, post_content, post_author, post_type FROM wp_posts';
     $query = $connection->query($sql);
     $query->setFetchMode(\PDO::FETCH_ASSOC);
-    return $query->fetchAll();
+    $data = $query->fetchAll();
+    foreach ($data as $key => $record) {
+      $sub_sql = 'SELECT term_taxonomy_id FROM wp_term_relationships WHERE object_id=' . $record['id'];
+      $sub_query = $connection->query($sub_sql);
+      $sub_query->setFetchMode(\PDO::FETCH_ASSOC);
+      $tags = '';
+      while ($sub_record = $sub_query->fetch()) {
+        $tags .= $sub_record['term_taxonomy_id'] . ',';
+      }
+      $data[$key]['tag_ids'] = rtrim($tags, ',');
+    }
+
+    return $data;
   }
 
   /**
@@ -78,7 +89,8 @@ class WordpressQuery extends Query {
   }
 
   public function getConnection() {
-    $conntection = new \PDO("mysql:host=127.0.0.1:3306;dbname=wordpress_test", 'root', 'root');
+    $options = [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'];
+    $conntection = new \PDO("mysql:host=127.0.0.1:3306;dbname=wordpress_test", 'root', 'root', $options);
     return $conntection;
   }
 }
