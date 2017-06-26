@@ -4,7 +4,7 @@ namespace SfDataExport;
 
 use SfDataExport\Query;
 
-class WordpressQuery extends Query {
+class Wordpress extends Query {
 
   /**
    * {@inheritdoc}

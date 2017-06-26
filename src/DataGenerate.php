@@ -42,7 +42,7 @@ class DataGenerate extends Command
     // Message.
     $output->writeln("Your data will be exported in " . $output_directory . " directory");
 
-    $object = new WordpressQuery();
+    $object = new Wordpress();
     if (!$object instanceof QueryInterface) {
       throw new RuntimeException('Class must implements the QueryInterface.');
     }
