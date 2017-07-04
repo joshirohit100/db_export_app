@@ -5,8 +5,12 @@ and export that data in XML or JSON format.
 
 ## How to use
 - Fork or Clone the repo.
-- Install the dependencies using 'composer install'.
-- Create the config.local.php with connection details to your WordPress site. Example,
+- Install the dependencies using composer.
+```
+composer install
+```
+
+- Create the config.local.php in the root folder with connection details to your WordPress site. Example,
 ```
   $connection['mysql'] = [
     'host' => '127.0.0.1',
