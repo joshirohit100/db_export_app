@@ -25,13 +25,13 @@ class Wordpress extends Query {
     $sql = 'SELECT id, user_login, user_pass, user_email, user_registered FROM wp_users';
     $query = $connection->query($sql);
     $query->setFetchMode(\PDO::FETCH_ASSOC);
-    $data = $query->fetchAll();
-    foreach ($data as $key => $record) {
+    $data['users'] = $query->fetchAll();
+    foreach ($data['users'] as $key => $record) {
       $sub_sql = 'SELECT meta_key, meta_value FROM wp_usermeta WHERE user_id=' . $record['id'];
       $sub_query = $connection->query($sub_sql);
       $sub_query->setFetchMode(\PDO::FETCH_ASSOC);
       while ($sub_record = $sub_query->fetch()) {
-        $data[$key][$sub_record['meta_key']] = $sub_record['meta_value'];
+        $data['users'][$key][$sub_record['meta_key']] = $sub_record['meta_value'];
       }
     }
 
@@ -46,7 +46,7 @@ class Wordpress extends Query {
     $sql = 'SELECT term_id, name FROM wp_terms';
     $query = $connection->query($sql);
     $query->setFetchMode(\PDO::FETCH_ASSOC);
-    $data = $query->fetchAll();
+    $data['wp_terms'] = $query->fetchAll();
 
     return $data;
   }
@@ -59,8 +59,8 @@ class Wordpress extends Query {
     $sql = 'SELECT id, post_title, post_content, post_author, post_type FROM wp_posts';
     $query = $connection->query($sql);
     $query->setFetchMode(\PDO::FETCH_ASSOC);
-    $data = $query->fetchAll();
-    foreach ($data as $key => $record) {
+    $data['content'] = $query->fetchAll();
+    foreach ($data['content'] as $key => $record) {
       $sub_sql = 'SELECT term_taxonomy_id FROM wp_term_relationships WHERE object_id=' . $record['id'];
       $sub_query = $connection->query($sub_sql);
       $sub_query->setFetchMode(\PDO::FETCH_ASSOC);
@@ -68,7 +68,7 @@ class Wordpress extends Query {
       while ($sub_record = $sub_query->fetch()) {
         $tags .= $sub_record['term_taxonomy_id'] . ',';
       }
-      $data[$key]['tag_ids'] = rtrim($tags, ',');
+      $data['content'][$key]['tag_ids'] = rtrim($tags, ',');
     }
 
     return $data;
@@ -83,7 +83,7 @@ class Wordpress extends Query {
  comment_approved, comment_parent, user_id FROM wp_comments';
     $query = $connection->query($sql);
     $query->setFetchMode(\PDO::FETCH_ASSOC);
-    $data = $query->fetchAll();
+    $data['comment'] = $query->fetchAll();
 
     return $data;
   }
