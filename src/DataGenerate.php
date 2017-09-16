@@ -66,17 +66,19 @@ class DataGenerate extends Command
       // Start and displays the progress bar.
       $progress->start();
 
-      foreach ($data as $key => $item) {
-        if (!empty($data[$key])) {
-          $response = $serializer->serialize([$key => $item], $format);
-          try {
-            $file_name = $output_directory . '/' . $key . '.' .  $format;
-            $fs->mkdir($output_directory);
-            $fs->dumpFile($file_name, $response);
-            $progress->advance();
-            $output->writeln("\n  ");
-          } catch (IOExceptionInterface $e) {
-            echo "An error occurred while creating your directory at ". $e->getPath();
+      foreach ($data as $type => $sub_data) {
+        if (!empty($data[$type])) {
+          foreach ($sub_data as $key => $item) {
+            $response = $serializer->serialize([$key => $item], $format);
+            try {
+              $file_name = $output_directory . '/' . $key . '.' .  $format;
+              $fs->mkdir($output_directory);
+              $fs->dumpFile($file_name, $response);
+              $progress->advance();
+              $output->writeln("\n  ");
+            } catch (IOExceptionInterface $e) {
+              echo "An error occurred while creating your directory at ". $e->getPath();
+            }
           }
         }
       }
