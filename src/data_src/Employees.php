@@ -71,7 +71,7 @@ class Employees extends Query {
    * Returns list of employees.
    */
   private function getEmployees($connection) {
-    $sql = 'SELECT * FROM employees LIMIT 100';
+    $sql = 'SELECT * FROM employees';
     $query = $connection->query($sql);
     $query->setFetchMode(\PDO::FETCH_ASSOC);
     $data = $query->fetchAll();
@@ -83,7 +83,7 @@ class Employees extends Query {
    * Returns list of employees in departments.
    */
   private function getDeptEmp($connection) {
-    $sql = 'SELECT * FROM dept_emp LIMIT 100';
+    $sql = 'SELECT * FROM dept_emp';
     $query = $connection->query($sql);
     $query->setFetchMode(\PDO::FETCH_ASSOC);
     $data = $query->fetchAll();
@@ -95,7 +95,7 @@ class Employees extends Query {
    * Returns list of managers in departments.
    */
   private function getDeptMgr($connection) {
-    $sql = 'SELECT * FROM dept_manager LIMIT 100';
+    $sql = 'SELECT * FROM dept_manager';
     $query = $connection->query($sql);
     $query->setFetchMode(\PDO::FETCH_ASSOC);
     $data = $query->fetchAll();
@@ -107,7 +107,7 @@ class Employees extends Query {
    * Returns salaries of employees.
    */
   private function getTitles($connection) {
-    $sql = 'SELECT * FROM titles LIMIT 100';
+    $sql = 'SELECT * FROM titles';
     $query = $connection->query($sql);
     $query->setFetchMode(\PDO::FETCH_ASSOC);
     $data = $query->fetchAll();
@@ -119,7 +119,7 @@ class Employees extends Query {
    * Returns salaries of employees.
    */
   private function getSalaries($connection) {
-    $sql = 'SELECT * FROM salaries LIMIT 100';
+    $sql = 'SELECT * FROM salaries';
     $query = $connection->query($sql);
     $query->setFetchMode(\PDO::FETCH_ASSOC);
     $data = $query->fetchAll();
