@@ -1,6 +1,6 @@
 <?php
 
-namespace SfDataExport;
+namespace SfDataExport\data_src;
 
 use SfDataExport\Query;
 
@@ -95,18 +95,18 @@ class Wordpress extends Query {
    *   PDO object.
    */
   public function getConnection() {
-    global $connection;
+    global $config;
 
-    $host = $connection['mysql']['host'];
-    $port = $connection['mysql']['port'];
-    $db = $connection['mysql']['db'];
-    $user = $connection['mysql']['user'];
-    $pass = $connection['mysql']['password'];
+    $host = $config['connection']['mysql']['host'];
+    $port = $config['connection']['mysql']['port'];
+    $db   = $config['connection']['mysql']['db'];
+    $user = $config['connection']['mysql']['user'];
+    $pass = $config['connection']['mysql']['password'];
 
     $options = [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'];
-    $conntection = new \PDO("mysql:host=$host:$port;dbname=$db", $user, $pass, $options);
+    $connection = new \PDO("mysql:host=$host:$port;dbname=$db", $user, $pass, $options);
 
-    return $conntection;
+    return $connection;
   }
 
 }
