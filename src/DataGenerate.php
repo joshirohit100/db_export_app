@@ -27,6 +27,7 @@ class DataGenerate extends Command
     $this->setDescription('Exports the database into given format like xml/json.');
     $this->addOption('format', 'f', InputOption::VALUE_OPTIONAL, 'Provide the data export format - xml or json.', 'xml');
     $this->addOption('output_directory_path', 'o', InputOption::VALUE_OPTIONAL, 'Provide the output directory path', '/tmp/sf_data_export');
+    $this->addOption('rec_limit', 'rl', InputOption::VALUE_OPTIONAL, 'Provide limit for processing the records. It will create multiple files.', 1000);
   }
 
   /**
@@ -38,6 +39,8 @@ class DataGenerate extends Command
     $format = $input->getOption('format');
     // Output directory path.
     $output_directory = $input->getOption('output_directory_path');
+    // Record limit.
+    $record_limit = $input->getOption('rec_limit');
 
     // Message.
     $output->writeln("Your data will be exported in " . $output_directory . " directory");
@@ -68,16 +71,21 @@ class DataGenerate extends Command
 
       foreach ($data as $type => $sub_data) {
         if (!empty($data[$type])) {
-          foreach ($sub_data as $key => $item) {
-            $response = $serializer->serialize([$key => $item], $format);
-            try {
-              $file_name = $output_directory . '/' . $key . '.' .  $format;
-              $fs->mkdir($output_directory);
-              $fs->dumpFile($file_name, $response);
-              $progress->advance();
-              $output->writeln("\n  ");
-            } catch (IOExceptionInterface $e) {
-              echo "An error occurred while creating your directory at ". $e->getPath();
+          foreach ($sub_data as $sub_key => $sub_item) {
+            $chunked_items = array_chunk($sub_item, $record_limit);
+            $i = 1;
+            foreach ($chunked_items as $key => $item) {
+              $response = $serializer->serialize([$sub_key => $item], $format);
+              try {
+                $file_name = $output_directory . '/' . $sub_key . '_' . $i . '.' .  $format;
+                $fs->mkdir($output_directory);
+                $fs->dumpFile($file_name, $response);
+                $progress->advance();
+                $output->writeln("\n  ");
+                $i++;
+              } catch (IOExceptionInterface $e) {
+                echo "An error occurred while creating your directory at ". $e->getPath();
+              }
             }
           }
         }
