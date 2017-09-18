@@ -98,13 +98,12 @@ class Wordpress extends Query {
     global $config;
 
     $host = $config['connection']['mysql']['host'];
-    $port = $config['connection']['mysql']['port'];
     $db   = $config['connection']['mysql']['db'];
     $user = $config['connection']['mysql']['user'];
     $pass = $config['connection']['mysql']['password'];
 
     $options = [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'];
-    $connection = new \PDO("mysql:host=$host:$port;dbname=$db", $user, $pass, $options);
+    $connection = new \PDO("mysql:host=$host;dbname=$db", $user, $pass, $options);
 
     return $connection;
   }
