@@ -10,6 +10,9 @@ class Employees extends Query {
    * {@inheritdoc}
    */
   public function getData() {
+    // TODO: We may think of better solution to avoid memory issue.
+    // To avoid memory issue while fetching millions of records from database.
+    ini_set('memory_limit', '-1');
     $data['term'] = $this->getTermData();
     $data['content'] = $this->getContentData();
 
